@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Bienvenido, ${username ?? 'Usuari'}',
+          'Bienvenido, ${username ?? 'Usuario'}',
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,

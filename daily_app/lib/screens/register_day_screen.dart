@@ -4,6 +4,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import '../widgets/select_emotions.dart'; // Asegúrate de que esta sea la ruta correcta para el widget
+import 'package:ftpconnect/ftpconnect.dart';
+
+Future<void> _uploadImageToFTP(File imageFile) async {
+  const String ftpHost = "ftp.fertestflutter.guayabitos.site";
+  const String ftpUser = "u815072435.flutterapp";
+  const String ftpPassword = "Fernando2024*";
+  const String remotePath = "/public_html/images"; // Example remote path
+
+  FTPConnect ftpClient = FTPConnect(ftpHost, user: ftpUser, pass: ftpPassword);
+
+  try {
+    await ftpClient.connect();
+    bool changeDir = await ftpClient.changeDirectory(remotePath);
+    if (!changeDir) {
+      await ftpClient.makeDirectory(remotePath);
+      await ftpClient.changeDirectory(remotePath);
+    }
+    bool uploadSuccess = await ftpClient.uploadFile(imageFile);
+    if (uploadSuccess) {
+      print("Image uploaded successfully!");
+    } else {
+      print("Image upload failed.");
+    }
+  } catch (e) {
+    print("FTP Error: $e");
+  } finally {
+    await ftpClient.disconnect();
+  }
+}
 
 class RegisterDayScreen extends StatefulWidget {
   const RegisterDayScreen({super.key});
@@ -89,20 +118,33 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
-      CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: pickedFile.path,
-        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
-        uiSettings: [AndroidUiSettings(toolbarTitle: 'Recorta tu imagen')],
-      );
+      File imageFile;
 
-      if (croppedFile != null) {
-        setState(() {
-          _allowMultipleImages
-              ? _selectedImages.add(File(croppedFile.path))
-              : _selectedImages = [File(croppedFile.path)];
-        });
-        _saveImages();
+      // Check platform and apply cropping or skip it for Windows
+      if (Platform.isWindows) {
+        // Skip cropping on Windows
+        imageFile = File(pickedFile.path);
+      } else {
+        // Crop image on other platforms
+        CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: pickedFile.path,
+          aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+          uiSettings: [AndroidUiSettings(toolbarTitle: 'Recorta tu imagen')],
+        );
+
+        // Use cropped file or fallback to picked file if cropping fails
+        imageFile = File(croppedFile?.path ?? pickedFile.path);
       }
+
+      setState(() {
+        _allowMultipleImages
+            ? _selectedImages.add(imageFile)
+            : _selectedImages = [imageFile];
+      });
+      _saveImages();
+
+      // Upload to FTP server
+      _uploadImageToFTP(imageFile);
     }
   }
 

@@ -41,6 +41,7 @@ dependencies:
   font_awesome_flutter: ^10.5.0
   image_picker: ^1.1.2
   image_cropper: ^8.0.2
+  ftpconnect: ^2.0.7
   http: ^1.2.2
 
 dev_dependencies:
