@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class EditUserScreen extends StatefulWidget {
+  const EditUserScreen({super.key});
+
   @override
   _EditUserScreenState createState() => _EditUserScreenState();
 }
@@ -31,7 +33,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
   }
 
   Future<void> _saveUserData() async {
-    final url = Uri.parse('https://fertestflutter.guayabitos.site/api/edit_user.php');
+    final url =
+        Uri.parse('https://fertestflutter.guayabitos.site/api/edit_user.php');
     final response = await http.post(url, body: {
       'email': _emailController.text,
       'name': _nameController.text,
@@ -49,10 +52,11 @@ class _EditUserScreenState extends State<EditUserScreen> {
         await prefs.setString('phone', _phoneController.text);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Perfil actualizado exitosamente')),
+          const SnackBar(content: Text('Perfil actualizado exitosamente')),
         );
 
-        Navigator.pop(context, true); // Retornamos 'true' para indicar que hubo un cambio
+        Navigator.pop(
+            context, true); // Retornamos 'true' para indicar que hubo un cambio
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: ${responseData['message']}')),
@@ -65,7 +69,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editar Perfil'),
+        title: const Text('Editar Perfil'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -73,26 +77,27 @@ class _EditUserScreenState extends State<EditUserScreen> {
           children: [
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Nombre'),
+              decoration: const InputDecoration(labelText: 'Nombre'),
             ),
             TextField(
               controller: _lastNameController,
-              decoration: InputDecoration(labelText: 'Apellido'),
+              decoration: const InputDecoration(labelText: 'Apellido'),
             ),
             TextField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Correo Electrónico'),
+              decoration:
+                  const InputDecoration(labelText: 'Correo Electrónico'),
               enabled: false, // El email no debería poder editarse
             ),
             TextField(
               controller: _phoneController,
-              decoration: InputDecoration(labelText: 'Teléfono'),
+              decoration: const InputDecoration(labelText: 'Teléfono'),
               keyboardType: TextInputType.phone,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _saveUserData,
-              child: Text('Guardar Cambios'),
+              child: const Text('Guardar Cambios'),
             ),
           ],
         ),

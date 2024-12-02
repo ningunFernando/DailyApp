@@ -51,12 +51,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Perfil de Usuario',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
         ),
@@ -66,37 +65,37 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ProfileImageSelector(),
-            SizedBox(height: 20),
-            Text(
+            const ProfileImageSelector(),
+            const SizedBox(height: 20),
+            const Text(
               'Nombre de Usuario:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text(
               '${_name ?? ''} ${_lastname ?? ''}', // Muestra nombre y apellido juntos
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 10),
-            Text(
+            const SizedBox(height: 10),
+            const Text(
               'Correo Electrónico:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text(
               _email ?? 'No disponible',
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: MoveEdit,
-              child: Text('Editar Perfil'),
+              child: const Text('Editar Perfil'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ElevatedButton(
               onPressed: _logout,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
               ),
-              child: Text('Cerrar Sesión'),
+              child: const Text('Cerrar Sesión'),
             ),
           ],
         ),

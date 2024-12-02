@@ -5,7 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 
 class ProfileImageSelector extends StatefulWidget {
-  const ProfileImageSelector({Key? key}) : super(key: key);
+  const ProfileImageSelector({super.key});
 
   @override
   _ProfileImageSelectorState createState() => _ProfileImageSelectorState();
@@ -41,7 +41,7 @@ class _ProfileImageSelectorState extends State<ProfileImageSelector> {
     if (pickedFile != null) {
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
         uiSettings: [AndroidUiSettings(toolbarTitle: 'Recorta tu imagen')],
       );
 
@@ -62,16 +62,16 @@ class _ProfileImageSelectorState extends State<ProfileImageSelector> {
           child: Wrap(
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.camera),
-                title: Text('Tomar una foto'),
+                leading: const Icon(Icons.camera),
+                title: const Text('Tomar una foto'),
                 onTap: () {
                   Navigator.of(context).pop();
                   _pickImage(ImageSource.camera);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Seleccionar de la galería'),
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Seleccionar de la galería'),
                 onTap: () {
                   Navigator.of(context).pop();
                   _pickImage(ImageSource.gallery);
@@ -94,15 +94,16 @@ class _ProfileImageSelectorState extends State<ProfileImageSelector> {
           CircleAvatar(
             radius: 60,
             backgroundColor: Colors.grey.shade300,
-            backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
+            backgroundImage:
+                _profileImage != null ? FileImage(_profileImage!) : null,
             child: _profileImage == null
-                ? Icon(Icons.person, size: 60, color: Colors.white)
+                ? const Icon(Icons.person, size: 60, color: Colors.white)
                 : null,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: _showImageSourceSelection,
-            child: Text('Seleccionar Imagen de Perfil'),
+            child: const Text('Seleccionar Imagen de Perfil'),
           ),
         ],
       ),

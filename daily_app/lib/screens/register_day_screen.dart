@@ -6,7 +6,7 @@ import 'package:image_cropper/image_cropper.dart';
 import '../widgets/select_emotions.dart'; // Asegúrate de que esta sea la ruta correcta para el widget
 
 class RegisterDayScreen extends StatefulWidget {
-  const RegisterDayScreen({Key? key}) : super(key: key);
+  const RegisterDayScreen({super.key});
 
   @override
   State<RegisterDayScreen> createState() => _RegisterDayScreenState();
@@ -47,11 +47,13 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
     if (_isPro) {
       _characterLimit = 500;
       _allowMultipleImages = true;
-      print("Ajustes aplicados: Pro activado - Límite de caracteres: $_characterLimit, Múltiples imágenes permitidas: $_allowMultipleImages");
+      print(
+          "Ajustes aplicados: Pro activado - Límite de caracteres: $_characterLimit, Múltiples imágenes permitidas: $_allowMultipleImages");
     } else {
       _characterLimit = 180;
       _allowMultipleImages = false;
-      print("Ajustes aplicados: Pro desactivado - Límite de caracteres: $_characterLimit, Múltiples imágenes permitidas: $_allowMultipleImages");
+      print(
+          "Ajustes aplicados: Pro desactivado - Límite de caracteres: $_characterLimit, Múltiples imágenes permitidas: $_allowMultipleImages");
     }
   }
 
@@ -79,7 +81,8 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
 
   Future _saveImages() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> imagePaths = _selectedImages.whereType<File>().map((file) => file.path).toList();
+    List<String> imagePaths =
+        _selectedImages.whereType<File>().map((file) => file.path).toList();
     await prefs.setStringList('selectedImages', imagePaths);
   }
 
@@ -88,13 +91,15 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
     if (pickedFile != null) {
       CroppedFile? croppedFile = await ImageCropper().cropImage(
         sourcePath: pickedFile.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+        aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
         uiSettings: [AndroidUiSettings(toolbarTitle: 'Recorta tu imagen')],
       );
 
       if (croppedFile != null) {
         setState(() {
-          _allowMultipleImages ? _selectedImages.add(File(croppedFile.path)) : _selectedImages = [File(croppedFile.path)];
+          _allowMultipleImages
+              ? _selectedImages.add(File(croppedFile.path))
+              : _selectedImages = [File(croppedFile.path)];
         });
         _saveImages();
       }
@@ -109,16 +114,16 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
           child: Wrap(
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.camera),
-                title: Text('Tomar una foto'),
+                leading: const Icon(Icons.camera),
+                title: const Text('Tomar una foto'),
                 onTap: () {
                   Navigator.of(context).pop();
                   _pickImage(ImageSource.camera);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Seleccionar de la galería'),
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Seleccionar de la galería'),
                 onTap: () {
                   Navigator.of(context).pop();
                   _pickImage(ImageSource.gallery);
@@ -140,7 +145,7 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
       body: ListView(
         padding: const EdgeInsets.all(0.0),
         children: [
-           // Agregado el selector de emociones
+          // Agregado el selector de emociones
           Padding(
             padding: const EdgeInsets.all(25.0),
             child: TextFormField(
@@ -148,8 +153,9 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
               maxLength: _characterLimit,
               decoration: InputDecoration(
                 labelText: 'Describe tu día',
-                border: OutlineInputBorder(),
-                counterText: '${_textController.text.length}/$_characterLimit caracteres',
+                border: const OutlineInputBorder(),
+                counterText:
+                    '${_textController.text.length}/$_characterLimit caracteres',
               ),
               maxLines: 5,
               onChanged: (text) => _saveText(),
@@ -180,8 +186,10 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
           Padding(
             padding: const EdgeInsets.all(25.0),
             child: ElevatedButton(
-              onPressed: _selectedImages.length < (_allowMultipleImages ? 3 : 1) ? _showImageSourceSelection : null,
-              child: Text('Seleccionar Imagen'),
+              onPressed: _selectedImages.length < (_allowMultipleImages ? 3 : 1)
+                  ? _showImageSourceSelection
+                  : null,
+              child: const Text('Seleccionar Imagen'),
             ),
           ),
         ],

@@ -24,7 +24,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // Verificar si los correos coinciden
     if (_emailController.text != _confirmEmailController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Los correos electrónicos no coinciden')),
+        const SnackBar(content: Text('Los correos electrónicos no coinciden')),
       );
       return; // Detiene el registro si los correos no coinciden
     }
@@ -32,7 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     // Verificar si las contraseñas coinciden
     if (_passwordController.text != _confirmPasswordController.text) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Las contraseñas no coinciden')),
+        const SnackBar(content: Text('Las contraseñas no coinciden')),
       );
       return; // Detiene el registro si las contraseñas no coinciden
     }
@@ -42,12 +42,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _lastNameController.text.isEmpty ||
         _phoneController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Por favor, complete todos los campos')),
+        const SnackBar(content: Text('Por favor, complete todos los campos')),
       );
       return; // Detiene el registro si alguno de estos campos está vacío
     }
 
-    final url = Uri.parse('https://fertestflutter.guayabitos.site/api/register.php');
+    final url =
+        Uri.parse('https://fertestflutter.guayabitos.site/api/register.php');
     final response = await http.post(url, body: {
       'email': _emailController.text,
       'password': _passwordController.text,
@@ -74,11 +75,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => NavigationScreen()),
+          MaterialPageRoute(builder: (context) => const NavigationScreen()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error en el registro: ${responseData['message']}')),
+          SnackBar(
+              content:
+                  Text('Error en el registro: ${responseData['message']}')),
         );
       }
     } else {
@@ -92,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Dai.ly',
           style: TextStyle(
             fontSize: 30,
@@ -102,7 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
           children: [
             Image.asset('images/IconoApp.png', scale: 4),
@@ -111,52 +114,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
               prefixIcon: Icons.email_outlined,
               controller: _emailController,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             CustomTextField(
               labelText: 'Confirmar Correo',
               prefixIcon: Icons.email_outlined,
               controller: _confirmEmailController,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             CustomTextField(
               labelText: 'Contraseña',
               prefixIcon: Icons.lock_outline,
               controller: _passwordController,
               isPassword: true,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             CustomTextField(
               labelText: 'Confirmar Contraseña',
               prefixIcon: Icons.lock_outline,
               controller: _confirmPasswordController,
               isPassword: true,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             CustomTextField(
               labelText: 'Nombre',
               prefixIcon: Icons.account_circle_outlined,
               controller: _nameController,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             CustomTextField(
               labelText: 'Apellido',
               prefixIcon: Icons.account_circle_outlined,
               controller: _lastNameController,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             CustomTextField(
               keyboardType: TextInputType.number,
               labelText: 'Teléfono',
               prefixIcon: Icons.phone_android_outlined,
               controller: _phoneController,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue,
               ),
               onPressed: _register,
-              child: Text('Regístrate'),
+              child: const Text('Regístrate'),
             ),
           ],
         ),

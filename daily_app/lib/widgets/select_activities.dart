@@ -4,9 +4,9 @@ class ActivitiesSelector extends StatefulWidget {
   final String title; // Parámetro para el texto de la tarjeta
 
   const ActivitiesSelector({
-    Key? key,
+    super.key,
     required this.title, // Requerimos el texto personalizado como parámetro
-  }) : super(key: key);
+  });
 
   @override
   _ActivitiesSelectorState createState() => _ActivitiesSelectorState();
@@ -17,15 +17,16 @@ class _ActivitiesSelectorState extends State<ActivitiesSelector> {
 
   void _onContainerTap(int index) {
     setState(() {
-      _selectedContainerIndex = index; // Actualiza el índice del contenedor seleccionado
+      _selectedContainerIndex =
+          index; // Actualiza el índice del contenedor seleccionado
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(25),
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 35),
+      margin: const EdgeInsets.all(25),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 35),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -33,14 +34,14 @@ class _ActivitiesSelectorState extends State<ActivitiesSelector> {
           BoxShadow(
             color: Colors.grey.shade300,
             blurRadius: 1,
-            offset: Offset(1, 1),
+            offset: const Offset(1, 1),
           ),
         ],
       ),
       child: Column(
         children: [
           Text(widget.title), // Usa el texto personalizado aquí
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -50,7 +51,7 @@ class _ActivitiesSelectorState extends State<ActivitiesSelector> {
                   child: Opacity(
                     opacity: _selectedContainerIndex == i ? 1.0 : 0.5,
                     child: Container(
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       height: 50,
                       width: 50,
                       decoration: BoxDecoration(
@@ -71,7 +72,7 @@ class _ActivitiesSelectorState extends State<ActivitiesSelector> {
                   child: Opacity(
                     opacity: _selectedContainerIndex == i ? 1.0 : 0.5,
                     child: Container(
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       height: 50,
                       width: 50,
                       decoration: BoxDecoration(
