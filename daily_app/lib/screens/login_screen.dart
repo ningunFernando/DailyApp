@@ -7,6 +7,8 @@ import './register_screen.dart';
 import '../widgets/custom_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -16,7 +18,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _login() async {
-    final url = Uri.parse('https://fertestflutter.guayabitos.site/api/login.php');
+    final url =
+        Uri.parse('https://fertestflutter.guayabitos.site/api/login.php');
     final response = await http.post(url, body: {
       'email': _usernameController.text.trim(),
       'password': _passwordController.text.trim(),
@@ -38,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => NavigationScreen()),
+          MaterialPageRoute(builder: (context) => const NavigationScreen()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -55,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void MovePage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => RegisterScreen()),
+      MaterialPageRoute(builder: (context) => const RegisterScreen()),
     );
   }
 
@@ -66,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Dai.ly',
           style: TextStyle(
             fontSize: 30,
@@ -76,18 +79,18 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: ListView(
           children: [
             Image.asset('images/IconoApp.png', scale: 2),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             CustomTextField(
               controller: _usernameController,
               keyboardType: TextInputType.text,
               labelText: 'Usuario',
               prefixIcon: Icons.account_circle_outlined,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             CustomTextField(
               controller: _passwordController,
               keyboardType: TextInputType.text,
@@ -95,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
               isPassword: true,
               prefixIcon: Icons.lock_outline,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Column(
               children: [
                 ElevatedButton(
@@ -108,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(color: secondaryColor),
                   ),
                 ),
-                SizedBox(height: 100),
+                const SizedBox(height: 100),
                 Text(
                   'No tienes cuenta?',
                   style: TextStyle(color: Colors.grey.shade500),
@@ -118,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     backgroundColor: secondaryColor,
                   ),
                   onPressed: MovePage,
-                  child: Text('Regístrate'),
+                  child: const Text('Regístrate'),
                 ),
               ],
             ),

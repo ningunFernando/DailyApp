@@ -4,6 +4,8 @@ import 'login_screen.dart';
 import 'navigation_screen.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   _SplashScreenState createState() => _SplashScreenState();
 }
@@ -21,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (isLoggedIn) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => NavigationScreen()),
+        MaterialPageRoute(builder: (context) => const NavigationScreen()),
       );
     } else {
       Navigator.of(context).pushReplacement(
@@ -32,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(child: CircularProgressIndicator()),
     );
   }

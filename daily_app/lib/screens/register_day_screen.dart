@@ -4,9 +4,38 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
 import '../widgets/select_emotions.dart'; // Asegúrate de que esta sea la ruta correcta para el widget
+import 'package:ftpconnect/ftpconnect.dart';
+
+Future<void> _uploadImageToFTP(File imageFile) async {
+  const String ftpHost = "ftp.fertestflutter.guayabitos.site";
+  const String ftpUser = "u815072435.flutterapp";
+  const String ftpPassword = "Fernando2024*";
+  const String remotePath = "/public_html/images"; // Example remote path
+
+  FTPConnect ftpClient = FTPConnect(ftpHost, user: ftpUser, pass: ftpPassword);
+
+  try {
+    await ftpClient.connect();
+    bool changeDir = await ftpClient.changeDirectory(remotePath);
+    if (!changeDir) {
+      await ftpClient.makeDirectory(remotePath);
+      await ftpClient.changeDirectory(remotePath);
+    }
+    bool uploadSuccess = await ftpClient.uploadFile(imageFile);
+    if (uploadSuccess) {
+      print("Image uploaded successfully!");
+    } else {
+      print("Image upload failed.");
+    }
+  } catch (e) {
+    print("FTP Error: $e");
+  } finally {
+    await ftpClient.disconnect();
+  }
+}
 
 class RegisterDayScreen extends StatefulWidget {
-  const RegisterDayScreen({Key? key}) : super(key: key);
+  const RegisterDayScreen({super.key});
 
   @override
   State<RegisterDayScreen> createState() => _RegisterDayScreenState();
@@ -47,11 +76,13 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
     if (_isPro) {
       _characterLimit = 500;
       _allowMultipleImages = true;
-      print("Ajustes aplicados: Pro activado - Límite de caracteres: $_characterLimit, Múltiples imágenes permitidas: $_allowMultipleImages");
+      print(
+          "Ajustes aplicados: Pro activado - Límite de caracteres: $_characterLimit, Múltiples imágenes permitidas: $_allowMultipleImages");
     } else {
       _characterLimit = 180;
       _allowMultipleImages = false;
-      print("Ajustes aplicados: Pro desactivado - Límite de caracteres: $_characterLimit, Múltiples imágenes permitidas: $_allowMultipleImages");
+      print(
+          "Ajustes aplicados: Pro desactivado - Límite de caracteres: $_characterLimit, Múltiples imágenes permitidas: $_allowMultipleImages");
     }
   }
 
@@ -79,25 +110,41 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
 
   Future _saveImages() async {
     final prefs = await SharedPreferences.getInstance();
-    List<String> imagePaths = _selectedImages.whereType<File>().map((file) => file.path).toList();
+    List<String> imagePaths =
+        _selectedImages.whereType<File>().map((file) => file.path).toList();
     await prefs.setStringList('selectedImages', imagePaths);
   }
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
-      CroppedFile? croppedFile = await ImageCropper().cropImage(
-        sourcePath: pickedFile.path,
-        aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-        uiSettings: [AndroidUiSettings(toolbarTitle: 'Recorta tu imagen')],
-      );
+      File imageFile;
 
-      if (croppedFile != null) {
-        setState(() {
-          _allowMultipleImages ? _selectedImages.add(File(croppedFile.path)) : _selectedImages = [File(croppedFile.path)];
-        });
-        _saveImages();
+      // Check platform and apply cropping or skip it for Windows
+      if (Platform.isWindows) {
+        // Skip cropping on Windows
+        imageFile = File(pickedFile.path);
+      } else {
+        // Crop image on other platforms
+        CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: pickedFile.path,
+          aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+          uiSettings: [AndroidUiSettings(toolbarTitle: 'Recorta tu imagen')],
+        );
+
+        // Use cropped file or fallback to picked file if cropping fails
+        imageFile = File(croppedFile?.path ?? pickedFile.path);
       }
+
+      setState(() {
+        _allowMultipleImages
+            ? _selectedImages.add(imageFile)
+            : _selectedImages = [imageFile];
+      });
+      _saveImages();
+
+      // Upload to FTP server
+      _uploadImageToFTP(imageFile);
     }
   }
 
@@ -109,16 +156,16 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
           child: Wrap(
             children: <Widget>[
               ListTile(
-                leading: Icon(Icons.camera),
-                title: Text('Tomar una foto'),
+                leading: const Icon(Icons.camera),
+                title: const Text('Tomar una foto'),
                 onTap: () {
                   Navigator.of(context).pop();
                   _pickImage(ImageSource.camera);
                 },
               ),
               ListTile(
-                leading: Icon(Icons.photo_library),
-                title: Text('Seleccionar de la galería'),
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Seleccionar de la galería'),
                 onTap: () {
                   Navigator.of(context).pop();
                   _pickImage(ImageSource.gallery);
@@ -140,7 +187,7 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
       body: ListView(
         padding: const EdgeInsets.all(0.0),
         children: [
-           // Agregado el selector de emociones
+          // Agregado el selector de emociones
           Padding(
             padding: const EdgeInsets.all(25.0),
             child: TextFormField(
@@ -148,8 +195,9 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
               maxLength: _characterLimit,
               decoration: InputDecoration(
                 labelText: 'Describe tu día',
-                border: OutlineInputBorder(),
-                counterText: '${_textController.text.length}/$_characterLimit caracteres',
+                border: const OutlineInputBorder(),
+                counterText:
+                    '${_textController.text.length}/$_characterLimit caracteres',
               ),
               maxLines: 5,
               onChanged: (text) => _saveText(),
@@ -180,8 +228,10 @@ class _RegisterDayScreenState extends State<RegisterDayScreen> {
           Padding(
             padding: const EdgeInsets.all(25.0),
             child: ElevatedButton(
-              onPressed: _selectedImages.length < (_allowMultipleImages ? 3 : 1) ? _showImageSourceSelection : null,
-              child: Text('Seleccionar Imagen'),
+              onPressed: _selectedImages.length < (_allowMultipleImages ? 3 : 1)
+                  ? _showImageSourceSelection
+                  : null,
+              child: const Text('Seleccionar Imagen'),
             ),
           ),
         ],

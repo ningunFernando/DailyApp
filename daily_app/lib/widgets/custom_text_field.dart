@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextField extends StatefulWidget {
-  CustomTextField({
+  const CustomTextField({
     this.controller,
     this.labelText,
     this.hintText,
@@ -10,8 +10,8 @@ class CustomTextField extends StatefulWidget {
     this.keyboardType,
     this.isPassword = false,
     this.prefixIcon,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String? labelText;
   final String? hintText;
@@ -44,20 +44,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
         labelText: widget.labelText,
         labelStyle: const TextStyle(color: Colors.grey),
         hintStyle: const TextStyle(fontSize: 12),
-        prefixIcon: widget.prefixIcon != null
-            ? Icon(widget.prefixIcon)
-            : null,
+        prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
         suffixIcon: widget.isPassword
             ? IconButton(
-          icon: Icon(
-            _obscureText ? Icons.visibility_off : Icons.visibility,
-          ),
-          onPressed: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-        )
+                icon: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
             : null,
       ),
     );

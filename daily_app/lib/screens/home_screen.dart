@@ -6,6 +6,8 @@ import '../screens/Edit_screen.dart';
 import '../services/api_service.dart';
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -24,18 +26,17 @@ class _HomeScreenState extends State<HomeScreen> {
     final name = prefs.getString('name') ?? '';
     final lastname = prefs.getString('lastname') ?? '';
     setState(() {
-      username = '$name';
+      username = name;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Bienvenido, ${username ?? 'Usuari'}',
-          style: TextStyle(
+          'Bienvenido, ${username ?? 'Usuario'}',
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w700,
             fontFamily: 'Poppins',
@@ -43,21 +44,32 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child:
-          ListView(
-            children: [
-              CustomDayCard( imageNumber: 2,),
-              SizedBox(height: 25,),
-              CustomDayCard(imageNumber: 1,),
-              SizedBox(height: 25,),
-              CustomDayCard(imageNumber: 3,),
-              SizedBox(height: 25,),
-              CustomDayCard(imageNumber: 4,)
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: const [
+              CustomDayCard(
+                imageNumber: 2,
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              CustomDayCard(
+                imageNumber: 1,
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              CustomDayCard(
+                imageNumber: 3,
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              CustomDayCard(
+                imageNumber: 4,
+              )
             ],
-          )
-      ),
+          )),
     );
   }
-
 }

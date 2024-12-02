@@ -6,9 +6,8 @@ import '../themes/bluemode_theme.dart';
 import 'package:provider/provider.dart';
 import '../themes/theme_provider.dart';
 
-
 class StoreScreen extends StatefulWidget {
-  const StoreScreen({Key? key}) : super(key: key);
+  const StoreScreen({super.key});
 
   @override
   _StoreScreenState createState() => _StoreScreenState();
@@ -17,17 +16,16 @@ class StoreScreen extends StatefulWidget {
 class _StoreScreenState extends State<StoreScreen> {
   @override
   Widget build(BuildContext context) {
-
     final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Seleccionar Tema'),
+        title: const Text('Seleccionar Tema'),
       ),
       body: Column(
         children: [
           ListTile(
-            title: Text('Tema Claro'),
+            title: const Text('Tema Claro'),
             leading: Radio<ThemeData>(
               value: lightMode,
               groupValue: themeProvider.themeData,
@@ -39,7 +37,7 @@ class _StoreScreenState extends State<StoreScreen> {
             ),
           ),
           ListTile(
-            title: Text('Tema Oscuro'),
+            title: const Text('Tema Oscuro'),
             leading: Radio<ThemeData>(
               value: darkMode,
               groupValue: themeProvider.themeData,
@@ -51,7 +49,7 @@ class _StoreScreenState extends State<StoreScreen> {
             ),
           ),
           ListTile(
-            title: Text('Tema Azul'),
+            title: const Text('Tema Azul'),
             leading: Radio<ThemeData>(
               value: blueMode,
               groupValue: themeProvider.themeData,
